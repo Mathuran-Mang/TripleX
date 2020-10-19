@@ -1,8 +1,9 @@
 #include <iostream>
+#include <ctime>
 
-void PrintIntroduction()
-{
-    std::cout << "\n\nYou're a wizard trapped inside a dungeon, trying to escape numerous magical monsters and beasts...\n";
+void PrintIntroduction(int Difficulty)
+{   
+    printf("\n\nYou're a wizard trapped inside floor %d of a dungeon, trying to escape numerous magical monsters and beasts...\n",Difficulty);
     std::cout << "You come across a giant stone gate which has writing on it...\n";
     std::cout << "The writing says to put the runes you see at the bottom of the gate in the correct order to pass...\n\n\n";
     std::cout << R"( _.------.                        .----.__
@@ -22,12 +23,12 @@ void PrintIntroduction()
     
 }
 
-bool PlayGame() 
+bool PlayGame(int Difficulty) 
 {
-    PrintIntroduction();
-    int CodeA = 4;
-    int CodeB = 7;
-    int CodeC = 8;
+    PrintIntroduction(Difficulty);
+    int CodeA = rand() % Difficulty + Difficulty;
+    int CodeB = rand() % Difficulty + Difficulty;
+    int CodeC = rand() % Difficulty + Difficulty;
 
     
     const int CodeSum = CodeA + CodeB + CodeC;
@@ -48,12 +49,12 @@ bool PlayGame()
 
     if (GuessSum == CodeSum && GuessProduct == CodeProduct) 
     {
-        std::cout << "\nYou put the runes in the right order! You have escaped the dungeon";
+        printf( "\n*** You put the runes in the right order! You have escaped floor %d of the dungeon! Keep going! ***",Difficulty);
         return true;
     }
     else
     {
-        std::cout << "\nYou put the runes in the wrong order! A cyclops has caught you and you have failed to escape the dungeon ";
+        std::cout << "\n*** You put the runes in the wrong order! Try again ***";
         return false;
     }
 
@@ -63,11 +64,22 @@ bool PlayGame()
 
 int main()
 {
-    while (true)
+    srand(time(NULL));
+
+    int LevelDifficulty = 1;
+    int const MaxLevel = 4;
+    while (LevelDifficulty <= MaxLevel) // Loop game until all levels are completed
     {   
-        bool bLevelComplete = PlayGame();
+        
+        bool bLevelComplete = PlayGame(LevelDifficulty);
         std::cin.clear();
         std::cin.ignore();
+
+        if (bLevelComplete) 
+        {
+           LevelDifficulty++; 
+        }
     }
+    printf("/n*** You have escaped the final floor you have completed the game! ***");
     return 0;
 }
